@@ -1,4 +1,4 @@
-﻿"""
+"""
 Zotero MCP server implementation.
 
 Note: ChatGPT requires specific tool names "search" and "fetch", and so they
@@ -30,7 +30,7 @@ from zotero_mcp.client import (
 )
 import requests
 
-from zotero_mcp.utils import format_creators, clean_html, is_local_mode
+from zotero_mcp.utils import format_creators, clean_html, is_local_mode, get_zotero_db_path
 
 @asynccontextmanager
 async def server_lifespan(server: FastMCP):
@@ -741,7 +741,8 @@ def list_libraries(*, ctx: Context) -> str:
         if local:
             from zotero_mcp.local_db import LocalZoteroReader
 
-            reader = LocalZoteroReader()
+            db_path = get_zotero_db_path()
+            reader = LocalZoteroReader(db_path=db_path)
             try:
                 libraries = reader.get_libraries()
 
@@ -895,7 +896,8 @@ def validate_library_switch(library_id: str, library_type: str) -> str | None:
         try:
             from zotero_mcp.local_db import LocalZoteroReader
 
-            reader = LocalZoteroReader()
+            db_path = get_zotero_db_path()
+            reader = LocalZoteroReader(db_path=db_path)
             try:
                 libraries = reader.get_libraries()
                 if library_type == "group":
@@ -939,7 +941,8 @@ def list_feeds(*, ctx: Context) -> str:
         ctx.info("Listing RSS feeds")
         from zotero_mcp.local_db import LocalZoteroReader
 
-        reader = LocalZoteroReader()
+        db_path = get_zotero_db_path()
+        reader = LocalZoteroReader(db_path=db_path)
         try:
             feeds = reader.get_feeds()
             if not feeds:
@@ -997,7 +1000,8 @@ def get_feed_items(
         ctx.info(f"Fetching items from feed (libraryID={library_id})")
         from zotero_mcp.local_db import LocalZoteroReader
 
-        reader = LocalZoteroReader()
+        db_path = get_zotero_db_path()
+        reader = LocalZoteroReader(db_path=db_path)
         try:
             # Verify this is actually a feed
             feeds = reader.get_feeds()

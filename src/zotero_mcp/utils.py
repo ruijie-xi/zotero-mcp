@@ -1,8 +1,41 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
+import json
 import os
 import re
+from pathlib import Path
 
 html_re = re.compile(r"<.*?>")
+
+_CONFIG_PATH = Path.home() / ".config" / "zotero-mcp" / "config.json"
+
+
+def get_zotero_db_path() -> Optional[str]:
+    """
+    Get Zotero database path from environment or config file.
+
+    Priority:
+    1. ZOTERO_DB_PATH environment variable
+    2. semantic_search.zotero_db_path in ~/.config/zotero-mcp/config.json
+    3. None (caller will use LocalZoteroReader auto-detect)
+
+    Returns:
+        Database path string, or None for auto-detect.
+    """
+    env_path = os.getenv("ZOTERO_DB_PATH", "").strip()
+    if env_path:
+        return env_path
+
+    try:
+        if _CONFIG_PATH.exists():
+            with open(_CONFIG_PATH) as f:
+                cfg = json.load(f)
+            db_path = cfg.get("semantic_search", {}).get("zotero_db_path")
+            if db_path and str(db_path).strip():
+                return str(db_path).strip()
+    except Exception:
+        pass
+
+    return None
 
 def format_creators(creators: list[dict[str, str]]) -> str:
     """

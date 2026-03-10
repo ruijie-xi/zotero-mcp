@@ -23,6 +23,9 @@ dependencies = [
     "mcp>=1.2.0",
     "python-dotenv>=1.0.0",
     "markitdown[pdf]",
+    # Pin onnxruntime<=1.20.1 on Windows: magika (markitdown dep) has import
+    # compatibility issues with onnxruntime 1.21+ (cuda_version ImportError).
+    "onnxruntime<=1.20.1; sys_platform == 'win32'",
     "pydantic>=2.0.0",
     "requests>=2.28.0",
     "fastmcp>=2.14.0",

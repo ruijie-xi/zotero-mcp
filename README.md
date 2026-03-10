@@ -1,55 +1,45 @@
 # Zotero MCP: Chat with your Research Library—Local or Web—in Claude, ChatGPT, and more.
 
-<p align="center">
-  <a href="https://www.zotero.org/">
-    <img src="https://img.shields.io/badge/Zotero-CC2936?style=for-the-badge&logo=zotero&logoColor=white" alt="Zotero">
-  </a>
-  <a href="https://www.anthropic.com/claude">
-    <img src="https://img.shields.io/badge/Claude-6849C3?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude">
-  </a>
-  <a href="https://chatgpt.com/">
-    <img src="https://img.shields.io/badge/ChatGPT-74AA9C?style=for-the-badge&logo=openai&logoColor=white" alt="ChatGPT">
-  </a>
-  <a href="https://modelcontextprotocol.io/introduction">
-    <img src="https://img.shields.io/badge/MCP-0175C2?style=for-the-badge&logoColor=white" alt="MCP">
-  </a>
-  <a href="https://pypi.org/project/zotero-mcp-server/">
-    <img src="https://img.shields.io/pypi/v/zotero-mcp-server?style=for-the-badge&logo=pypi&logoColor=white" alt="PyPI">
-  </a>
-</p>
+
 
 **Zotero MCP** seamlessly connects your [Zotero](https://www.zotero.org/) research library with [ChatGPT](https://openai.com), [Claude](https://www.anthropic.com/claude), and other AI assistants (e.g., [Cherry Studio](https://cherry-ai.com/), [Chorus](https://chorus.sh), [Cursor](https://www.cursor.com/)) via the [Model Context Protocol](https://modelcontextprotocol.io/introduction). Review papers, get summaries, analyze citations, extract PDF annotations, and more!
 
 ## ✨ Features
 
 ### 🧠 AI-Powered Semantic Search
+
 - **Vector-based similarity search** over your entire research library
 - **Multiple embedding models**: Default (free), OpenAI, and Gemini options
 - **Intelligent results** with similarity scores and contextual matching
 - **Auto-updating database** with configurable sync schedules
 
 ### 🔍 Search Your Library
+
 - Find papers, articles, and books by title, author, or content
 - Perform complex searches with multiple criteria
 - Browse collections, tags, and recent additions
 - **NEW**: Semantic search for conceptual and topic-based discovery
 
 ### 📚 Access Your Content
+
 - Retrieve detailed metadata for any item
 - Get full text content (when available)
 - Access attachments, notes, and child items
 
 ### 📝 Work with Annotations
+
 - Extract and search PDF annotations directly
 - Access Zotero's native annotations
 - Create and update notes and annotations
 
 ### 🔄 Easy Updates
+
 - **Smart update system** that detects your installation method (uv, pip, conda, pipx)
 - **Configuration preservation** - all settings maintained during updates
 - **Version checking** and automatic update notifications
 
 ### 🌐 Flexible Access Methods
+
 - Local method for offline access (no API key needed)
 - Web API for cloud library access
 - Perfect for both local research and remote collaboration
@@ -108,11 +98,13 @@ zotero-mcp setup --semantic-config-only
 ```
 
 **Available Embedding Models:**
+
 - **Default (all-MiniLM-L6-v2)**: Free, runs locally, good for most use cases
 - **OpenAI**: Better quality, requires API key (`text-embedding-3-small` or `text-embedding-3-large`)
 - **Gemini**: Better quality, requires API key (`gemini-embedding-001`)
 
 **Update Frequency Options:**
+
 - **Manual**: Update only when you run `zotero-mcp update-db`
 - **Auto on startup**: Update database every time the server starts
 - **Daily**: Update once per day automatically
@@ -139,6 +131,7 @@ zotero-mcp db-status
 ```
 
 **Example Semantic Queries in your AI assistant:**
+
 - *"Find research similar to machine learning concepts in neuroscience"*
 - *"Papers that discuss climate change impacts on agriculture"*
 - *"Research related to quantum computing applications"*
@@ -152,6 +145,7 @@ The semantic search provides similarity scores and finds papers based on concept
 Full documentation is available at [Zotero MCP docs](https://stevenyuyy.us/zotero-mcp/).
 
 **Requirements**
+
 - Python 3.10+
 - Zotero 7+ (for local API with full-text access)
 - An MCP-compatible client (e.g., Claude Desktop, ChatGPT Developer Mode, Cherry Studio, Chorus)
@@ -161,27 +155,15 @@ Full documentation is available at [Zotero MCP docs](https://stevenyuyy.us/zoter
 ### For Claude Desktop (example MCP client)
 
 #### Configuration
+
 After installation, either:
 
 1. **Auto-configure** (recommended):
-   ```bash
+  ```bash
    zotero-mcp setup
-   ```
-
+  ```
 2. **Manual configuration**:
-   Add to your `claude_desktop_config.json`:
-   ```json
-   {
-     "mcpServers": {
-       "zotero": {
-         "command": "zotero-mcp",
-         "env": {
-           "ZOTERO_LOCAL": "true"
-         }
-       }
-     }
-   }
-   ```
+  Add to your `claude_desktop_config.json`:
 
 #### Usage
 
@@ -190,6 +172,7 @@ After installation, either:
 3. Access the Zotero-MCP tool through Claude Desktop's tools interface
 
 Example prompts:
+
 - "Search my library for papers on machine learning"
 - "Find recent articles I've added about climate change"
 - "Summarize the key findings from my paper on quantum computing"
@@ -205,6 +188,7 @@ Example prompts:
 ### For Cherry Studio
 
 #### Configuration
+
 Go to Settings -> MCP Servers -> Edit MCP Configuration, and add the following:
 
 ```json
@@ -223,6 +207,7 @@ Go to Settings -> MCP Servers -> Edit MCP Configuration, and add the following:
   }
 }
 ```
+
 Then click "Save".
 
 Cherry Studio also provides a visual configuration method for general settings and tools selection.
@@ -240,12 +225,14 @@ zotero-mcp setup --no-local --api-key YOUR_API_KEY --library-id YOUR_LIBRARY_ID
 ### Environment Variables
 
 **Zotero Connection:**
+
 - `ZOTERO_LOCAL=true`: Use the local Zotero API (default: false)
 - `ZOTERO_API_KEY`: Your Zotero API key (for web API)
 - `ZOTERO_LIBRARY_ID`: Your Zotero library ID (for web API)
 - `ZOTERO_LIBRARY_TYPE`: The type of library (user or group, default: user)
 
 **Semantic Search:**
+
 - `ZOTERO_EMBEDDING_MODEL`: Embedding model to use (default, openai, gemini)
 - `OPENAI_API_KEY`: Your OpenAI API key (for OpenAI embeddings)
 - `OPENAI_EMBEDDING_MODEL`: OpenAI model name (text-embedding-3-small, text-embedding-3-large)
@@ -297,17 +284,18 @@ Zotero MCP includes advanced PDF annotation extraction capabilities:
 
 For optimal annotation extraction, it is **highly recommended** to install the [Better BibTeX plugin](https://retorque.re/zotero-better-bibtex/installation/) for Zotero. The annotation-related functions have been primarily tested with this plugin and provide enhanced functionality when it's available.
 
-
 The first time you use PDF annotation features, the necessary tools will be automatically downloaded.
 
 ## 📚 Available Tools
 
 ### 🧠 Semantic Search Tools
+
 - `zotero_semantic_search`: AI-powered similarity search with embedding models
 - `zotero_update_search_database`: Manually update the semantic search database
 - `zotero_get_search_database_status`: Check database status and configuration
 
 ### 🔍 Search Tools
+
 - `zotero_search_items`: Search your library by keywords
 - `zotero_advanced_search`: Perform complex searches with multiple criteria
 - `zotero_get_collections`: List collections
@@ -317,11 +305,13 @@ The first time you use PDF annotation features, the necessary tools will be auto
 - `zotero_search_by_tag`: Search your library using custom tag filters
 
 ### 📚 Content Tools
+
 - `zotero_get_item_metadata`: Get detailed metadata (supports BibTeX export via `format="bibtex"`)
 - `zotero_get_item_fulltext`: Get full text content
 - `zotero_get_item_children`: Get attachments and notes
 
 ### 📝 Annotation & Notes Tools
+
 - `zotero_get_annotations`: Get annotations (including direct PDF extraction)
 - `zotero_get_notes`: Retrieve notes from your Zotero library
 - `zotero_search_notes`: Search in notes and annotations (including PDF-extracted)
@@ -330,6 +320,7 @@ The first time you use PDF annotation features, the necessary tools will be auto
 ## 🔍 Troubleshooting
 
 ### General Issues
+
 - **No results found**: Ensure Zotero is running and the local API is enabled. You need to toggle on `Allow other applications on this computer to communicate with Zotero` in Zotero preferences.
 - **Can't connect to library**: Check your API key and library ID if using web API
 - **Full text not available**: Make sure you're using Zotero 7+ for local full-text access
@@ -337,6 +328,7 @@ The first time you use PDF annotation features, the necessary tools will be auto
 - **Installation/search option switching issues**: Database problems from changing install methods or search options can often be resolved with `zotero-mcp update-db --force-rebuild`
 
 ### Semantic Search Issues
+
 - **"Missing required environment variables" when running update-db**: Run `zotero-mcp setup` to configure your environment, or the CLI will automatically load settings from your MCP client config (e.g., Claude Desktop)
 - **ChromaDB warnings**: Update to the latest version - deprecation warnings have been fixed
 - **Database update takes long**: By default, `update-db` is fast (metadata-only). For comprehensive indexing with full-text, use `--fulltext` flag. Use `--limit` parameter for testing: `zotero-mcp update-db --limit 100`
@@ -345,6 +337,7 @@ The first time you use PDF annotation features, the necessary tools will be auto
 - **OpenAI/Gemini API errors**: Verify your API keys are correctly set and have sufficient credits/quota
 
 ### Update Issues
+
 - **Update command fails**: Check your internet connection and try `zotero-mcp update --force`
 - **Configuration lost after update**: The update process preserves configs automatically, but check `~/.config/zotero-mcp/` for backup files
 
@@ -352,9 +345,7 @@ The first time you use PDF annotation features, the necessary tools will be auto
 
 If you find Zotero MCP useful, consider buying me a coffee!
 
-<a href="https://buymeacoffee.com/stevenyuyy">
-  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
-</a>
+
 
 ## 📄 License
 
