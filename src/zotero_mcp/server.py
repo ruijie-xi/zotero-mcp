@@ -80,6 +80,24 @@ async def server_lifespan(server: FastMCP):
 # Create an MCP server (fastmcp 2.14+ no longer accepts `dependencies`)
 mcp = FastMCP("Zotero", lifespan=server_lifespan)
 
+# Tools that are implemented but not exposed to MCP clients (not in list_tools).
+DISABLED_TOOLS = frozenset({
+    "zotero_search_by_tag",
+    "zotero_get_tags",
+    "zotero_get_recent",
+    "zotero_list_libraries",
+    "zotero_switch_library",
+    "zotero_list_feeds",
+    "zotero_get_feed_items",
+    "zotero_create_annotation",
+})
+
+def optional_tool(**kwargs):
+    """Register with mcp.tool only if tool name is not in DISABLED_TOOLS."""
+    if kwargs.get("name") in DISABLED_TOOLS:
+        return lambda f: f
+    return mcp.tool(**kwargs)
+
 
 @mcp.tool(
     name="zotero_search_items",
@@ -172,7 +190,7 @@ def search_items(
         ctx.error(f"Error searching Zotero: {str(e)}")
         return f"Error searching Zotero: {str(e)}"
 
-@mcp.tool(
+@optional_tool(
     name="zotero_search_by_tag",
     description="Search for items in your Zotero library by tag. "
     "Conditions are ANDed, each term supports disjunction (`OR`) and exclusion (`-`)."
@@ -655,7 +673,7 @@ def get_item_children(
         return f"Error fetching item children: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_get_tags",
     description="Get all tags used in your Zotero library."
 )
@@ -709,7 +727,7 @@ def get_tags(
         return f"Error fetching tags: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_list_libraries",
     description="List all accessible Zotero libraries (user library, group libraries, and RSS feeds). Use this to discover available libraries before switching with zotero_switch_library.",
 )
@@ -818,7 +836,7 @@ def list_libraries(*, ctx: Context) -> str:
         return f"Error listing libraries: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_switch_library",
     description="Switch the active Zotero library context. All subsequent tool calls will operate on the selected library. Use zotero_list_libraries first to see available options. Pass library_type='default' to reset to the original environment variable configuration.",
 )
@@ -922,7 +940,7 @@ def validate_library_switch(library_id: str, library_type: str) -> str | None:
     return None
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_list_feeds",
     description="List all RSS feed subscriptions in your local Zotero installation. Shows feed names, URLs, item counts, and last check times. Local mode only.",
 )
@@ -971,7 +989,7 @@ def list_feeds(*, ctx: Context) -> str:
         return f"Error listing feeds: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_get_feed_items",
     description="Get items from a specific RSS feed by its library ID. Use zotero_list_feeds first to find feed library IDs. Local mode only.",
 )
@@ -1045,7 +1063,7 @@ def get_feed_items(
         return f"Error fetching feed items: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_get_recent",
     description="Get recently added items to your Zotero library."
 )
@@ -2263,7 +2281,7 @@ def create_note(
         return f"Error creating note: {str(e)}"
 
 
-@mcp.tool(
+@optional_tool(
     name="zotero_create_annotation",
     description="Create a highlight annotation on a PDF or EPUB attachment with optional comment."
 )
